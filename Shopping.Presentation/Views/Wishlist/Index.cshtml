@@ -1,0 +1,331 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wishlist</title>
+
+    @* Loader *@
+
+    <style>
+
+        .cube-loader {
+            position: relative;
+            /* u can choose any size */
+            width: 75px;
+            height: 75px;
+            transform-style: preserve-3d;
+            transform: rotateX(-30deg);
+            animation: animate 4s linear infinite;
+        }
+
+        @@keyframes animate {
+            0% {
+                transform: rotateX(-30deg) rotateY(0);
+            }
+
+            100% {
+                transform: rotateX(-30deg) rotateY(360deg);
+            }
+        }
+
+        .cube-loader .cube-wrapper {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            /* top: 0;
+                  left: 0; */
+            transform-style: preserve-3d;
+        }
+
+            .cube-loader .cube-wrapper .cube-span {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                /* top: 0;
+                  left: 0; */
+                /* width 75px / 2 = 37.5px */
+                transform: rotateY(calc(90deg * var(--i))) translateZ(37.5px);
+                background: linear-gradient( to bottom, hsl(330, 3.13%, 25.1%) 0%, hsl(177.27, 21.71%, 32.06%) 5.5%, hsl(176.67, 34.1%, 36.88%) 12.1%, hsl(176.61, 42.28%, 40.7%) 19.6%, hsl(176.63, 48.32%, 43.88%) 27.9%, hsl(176.66, 53.07%, 46.58%) 36.6%, hsl(176.7, 56.94%, 48.91%) 45.6%, hsl(176.74, 62.39%, 50.91%) 54.6%, hsl(176.77, 69.86%, 52.62%) 63.4%, hsl(176.8, 76.78%, 54.08%) 71.7%, hsl(176.83, 83.02%, 55.29%) 79.4%, hsl(176.85, 88.44%, 56.28%) 86.2%, hsl(176.86, 92.9%, 57.04%) 91.9%, hsl(176.88, 96.24%, 57.59%) 96.3%, hsl(176.88, 98.34%, 57.93%) 99%, hsl(176.89, 99.07%, 58.04%) 100% );
+            }
+
+        .cube-top {
+            position: absolute;
+            width: 75px;
+            height: 75px;
+            background: hsl(330, 3.13%, 25.1%) 0%;
+            /* width 75px / 2 = 37.5px */
+            transform: rotateX(90deg) translateZ(37.5px);
+            transform-style: preserve-3d;
+        }
+
+            .cube-top::before {
+                content: '';
+                position: absolute;
+                /* u can choose any size */
+                width: 75px;
+                height: 75px;
+                background: hsl(176.61, 42.28%, 40.7%) 19.6%;
+                transform: translateZ(-90px);
+                filter: blur(10px);
+                box-shadow: 0 0 10px #323232, 0 0 20px hsl(176.61, 42.28%, 40.7%) 19.6%, 0 0 30px #323232, 0 0 40px hsl(176.61, 42.28%, 40.7%) 19.6%;
+            }
+
+    </style>
+
+</head>
+<body>
+
+    <main role="main">
+        <div class="Wishlist-Section">
+            <div class="Wishlist-Area">
+                <div class="container">
+                    <div class="Wishlist-Exists">
+
+                        <div class="cube-loader" style="position: absolute; top: 40%; left: 45%;">
+                            <div class="cube-top"></div>
+                            <div class="cube-wrapper">
+                                <span style="--i:0" class="cube-span"></span>
+                                <span style="--i:1" class="cube-span"></span>
+                                <span style="--i:2" class="cube-span"></span>
+                                <span style="--i:3" class="cube-span"></span>
+                            </div>
+                        </div>
+
+                        <div class="Row">
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    @* loader *@
+
+    <script>
+
+        const loaderElement = document.querySelector(".cube-loader");
+
+        function showLoader(show) {
+            loaderElement.style.display = show ? "block" : "none";
+        }
+
+    </script>
+
+    @* Icons *@
+
+    <script>
+        const wishIconPath = '@Url.Content("~/Shopping/assets/icons/WishIcon.svg")';
+        const whiteWishIconPath = '@Url.Content("~/Shopping/assets/icons/WhiteWish.svg")';
+        const quickviewIconPath = '@Url.Content("~/Shopping/assets/icons/Quickview.svg")';
+    </script>
+
+    @* fill UI *@
+
+     <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            showLoader(true);
+
+            const wishlistItems = JSON.parse(localStorage.getItem('wishlist')) || [];
+
+            const Wishlist_Exists = document.querySelector('.Wishlist-Exists');
+
+            if (wishlistItems.length > 0) {
+                wishlistItems.forEach(item => {
+                    const row = document.querySelector('.Row');
+
+                    const Single_Product = document.createElement("div");
+                    Single_Product.classList.add("Single-Product", "Col");
+                    Single_Product.setAttribute('data-product-id', item.id);
+
+                    const Pro_Img = document.createElement("div");
+                    Pro_Img.classList.add("Pro-Img");
+                    Pro_Img.style.marginRight = "20px";
+
+
+                    const ImageLink = document.createElement("a");
+
+                    const ImageElement = document.createElement("img");
+                    ImageElement.src = item.imageUrl;
+
+                    ImageLink.appendChild(ImageElement);
+
+                    Pro_Img.appendChild(ImageLink);
+
+                    const productActions = document.createElement("div");
+                    productActions.classList.add("product-actions");
+
+                    const primaryActions = document.createElement("div");
+                    primaryActions.classList.add("Primary-Actions");
+
+                    const addToCartButton = document.createElement("button");
+                    addToCartButton.classList.add("Add-To-Cart");
+                    addToCartButton.textContent = "Add To Cart";
+                    addToCartButton.setAttribute('data-product-id', item.id);
+                    addToCartButton.setAttribute('data-product-name', item.name);
+                    addToCartButton.setAttribute('data-product-price', item.price);
+                    addToCartButton.setAttribute('data-product-image', item.imageUrl);
+
+                    primaryActions.appendChild(addToCartButton);
+
+                    const secondaryActions = document.createElement("div");
+                    secondaryActions.classList.add("Secondary-Actions");
+
+                    const addToWishlistLink = document.createElement("a");
+                    addToWishlistLink.id = "add-to-wishlist";
+                    addToWishlistLink.style.cursor = "pointer";
+                    addToWishlistLink.setAttribute('data-product-id', item.id);
+                    addToWishlistLink.setAttribute('data-product-name', item.name);
+                    addToWishlistLink.setAttribute('data-product-price', item.price);
+                    addToWishlistLink.setAttribute('data-product-image', item.imageUrl);
+
+                    const wishlistIcon = document.createElement("img");
+                    wishlistIcon.src = whiteWishIconPath
+
+                    addToWishlistLink.appendChild(wishlistIcon);
+
+                    const quickviewLink = document.createElement("a");
+                    quickviewLink.id = "quickview";
+
+                    const quickviewIcon = document.createElement("img");
+                    quickviewIcon.src = quickviewIconPath;
+                    quickviewLink.style.cursor = "pointer";
+                    quickviewLink.setAttribute('data-product-id', item.id);
+
+                    quickviewLink.appendChild(quickviewIcon);
+
+                    secondaryActions.appendChild(addToWishlistLink);
+                    secondaryActions.appendChild(quickviewLink);
+
+                    productActions.appendChild(primaryActions);
+                    productActions.appendChild(secondaryActions);
+
+                    Pro_Img.appendChild(productActions);
+
+                    Single_Product.append(Pro_Img);
+
+                    const Product_Content = document.createElement("div");
+                    Product_Content.classList.add("Product-Content");
+                    Product_Content.style.height = "150px";
+                    Product_Content.style.position = "relative";
+                    Product_Content.style.zIndex = "auto";
+
+                    const productTitle = document.createElement("h4");
+                    productTitle.textContent = item.name;
+
+                    const productPrice = document.createElement("p");
+
+                    productPrice.style.position = "absolute";
+                    productPrice.style.bottom = "10%";
+
+                    const priceSpan = document.createElement("span");
+                    priceSpan.id = "price";
+
+                    const moneySpan = document.createElement("span");
+                    moneySpan.id = "money";
+                    moneySpan.textContent = `$${item.price}`;
+                    priceSpan.appendChild(moneySpan);
+                    productPrice.appendChild(priceSpan);
+
+                    Product_Content.appendChild(productTitle);
+                    Product_Content.appendChild(productPrice);
+
+                    Single_Product.appendChild(Product_Content);
+
+                    row.appendChild(Single_Product);
+                });
+            } else {
+                const emptyMessage = document.createElement('h1');
+                emptyMessage.textContent = "Your Wishlist Is Currently Empty, Is Your life really that bad? ;( Wishing is a good thing ;)";
+                Wishlist_Exists.append(emptyMessage);
+            }
+
+            showLoader(false);
+        });
+
+    </script> 
+
+    @* SingleProducts && Quickview *@
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", () => {
+
+            const Single_Products = document.querySelectorAll(".Single-Product.Col");
+
+            Single_Products.forEach(item => {
+                const AddToCart_Btn = item.querySelector(".Add-To-Cart");
+                const add_to_wishlist = item.querySelector("#add-to-wishlist");
+                const quickview = item.querySelector("#quickview");
+                const Product_Content = item.querySelector(".Product-Content");
+                const Price = item.querySelector("p");
+                const product_actions = item.querySelector(".product-actions");
+                let IsClicked = false;
+
+                if (screen.width > 1000) {
+
+                    item.addEventListener("mouseover", () => {
+                        Product_Content.style.transform = "translateY(-20px)";
+                        product_actions.style.transform = "translateY(20px)";
+
+                        Price.style.opacity = 0;
+
+                        AddToCart_Btn.classList.add("Appear");
+                        add_to_wishlist.classList.add("Appear");
+                        quickview.classList.add("Appear");
+                    });
+
+                    item.addEventListener("mouseout", () => {
+                        Product_Content.style.transform = "translateY(0px)"
+                        product_actions.style.transform = "translateY(0px)";
+
+                        Price.style.opacity = 1;
+
+                        AddToCart_Btn.classList.remove("Appear");
+                        add_to_wishlist.classList.remove("Appear");
+                        quickview.classList.remove("Appear");
+                    });
+
+                } else if (screen.width <= 991) {
+
+                    item.addEventListener("click", () => {
+                        IsClicked = !IsClicked;
+
+                        AddToCart_Btn.classList.add("Appear");
+                        add_to_wishlist.classList.add("Appear");
+                        quickview.classList.add("Appear");
+                    });
+
+                    item.addEventListener("mouseout", () => {
+                        AddToCart_Btn.classList.remove("Appear");
+                        add_to_wishlist.classList.remove("Appear");
+                        quickview.classList.remove("Appear");
+                    });
+
+                } else if (screen.width <= 762) {
+
+                    item.addEventListener("mouseover", () => {
+                        AddToCart_Btn.classList.add("Appear");
+                        add_to_wishlist.classList.add("Appear");
+                        quickview.classList.add("Appear");
+
+                        Price.style.opacity = 1;
+                    });
+
+                    item.addEventListener("mouseout", () => {
+                        AddToCart_Btn.classList.remove("Appear");
+                        add_to_wishlist.classList.remove("Appear");
+                        quickview.classList.remove("Appear");
+                    });
+
+                }
+            });
+
+        });
+
+    </script>
+
+</body>
+</html>
