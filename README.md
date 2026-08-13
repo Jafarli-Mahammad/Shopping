@@ -1,6 +1,6 @@
 # Shopping API
 
-A robust backend platform managing the core e-commerce lifecycle, from product catalog and inventory management to cart state and order processing. This project was fully hand-built without vibe coding.
+A robust backend platform managing the core e-commerce lifecycle, from product catalog and inventory management to cart state and order processing. This project was hand-built without AI coding agents help
 
 ## 🏗 Architecture & Domain Boundaries
 
